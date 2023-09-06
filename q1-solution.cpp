@@ -32,4 +32,5 @@ int bin_search(const std::string &str) {
 // Q2
 // 若要insert "111"到vs內, 應該放在哪最為合適.
 
-// Ans. 
+// Ans.
+// 根據 ASCII 規則，"1" 的值大於 "z"，因此應該 insert "111" 到 "zzz" 後面。
