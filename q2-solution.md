@@ -49,3 +49,5 @@ void *thd_func2 (void *arg) {
 ```
 
 對於 lock 順序，應該先 lock `counter_mtx` -> write lock `rwlock` -> unlock `rwlock` -> unlock `counter_mtx`。
+
+相關 changes 可以在 [acb685a](https://github.com/Cuda-Chen/bigobject-inc-interview/commit/acb685aa5bf9d702e44e264f76d97fa19f1df4ed) 看到。
