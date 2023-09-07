@@ -1,5 +1,8 @@
 # q2-solution
 
+[8f9935a](https://github.com/Cuda-Chen/bigobject-inc-interview/commit/ed4afadc11a6dbee2977c2c7a370e2d42b859370)
+使用 Thread Sanitizer 可以發現有 deadlock 之問題：
+
 ```bash
 $ g++ -o q2 q2.cpp -Wall -g -lpthread -fsanitize=thread
 $ ./q2
@@ -31,3 +34,18 @@ SUMMARY: ThreadSanitizer: lock-order-inversion (potential deadlock) /home/jio/cp
 ==================
 ThreadSanitizer: reported 1 warnings
 ```
+
+在看程式碼（q2.cpp）之後可以發現，`thd_func2` 的 lock 順序應該進行調整：
+
+```cpp
+void *thd_func2 (void *arg) {
+    pthread_rwlock_wrlock(&rwlock);
+    counter_mtx.lock();
+    counter--;
+    counter_mtx.unlock();
+    pthread_rwlock_unlock(&rwlock);
+    return NULL;
+}
+```
+
+對於 lock 順序，應該先 lock `counter_mtx` -> write lock `rwlock` -> unlock `rwlock` -> unlock `counter_mtx`。
